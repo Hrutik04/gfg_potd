@@ -1,3 +1,3 @@
 #gfg_potd
 
-It consists solutions to problem of the day posted on leetcode platform.
+It consists solutions to problem of the day posted on geeksforgeeks platform.
