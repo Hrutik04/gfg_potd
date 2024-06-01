@@ -1,0 +1,104 @@
+Question :
+
+Vertical sum
+Given a binary tree having n nodes, find the vertical sum of the nodes that are in the same vertical line. Return all sums through different vertical lines starting from the left-most vertical line to the right-most vertical line.
+
+Example 1:
+
+Input:
+       1
+    /    \
+  2      3
+ /  \    /  \
+4   5  6   7
+Output: 
+4 2 12 3 7
+Explanation:
+The tree has 5 vertical lines
+Line 1 has only one node 4 => vertical sum is 4.
+Line 2 has only one node 2 => vertical sum is 2.
+Line-3 has three nodes: 1,5,6 => vertical sum is 1+5+6 = 12.
+Line-4 has only one node 3 => vertical sum is 3.
+Line-5 has only one node 7 => vertical sum is 7.
+Example 2:
+
+Input:
+          1
+         /
+        2
+       /
+      3
+     /
+    4
+   /
+  6
+ /
+7
+Output: 
+7 6 5 4 3 2 1
+Explanation:
+There are seven vertical lines each having one node.
+Your Task:
+You don't need to take input. Just complete the function verticalSum() that takes root node of the tree as parameter and returns an array containing the vertical sum of tree from left to right.
+
+Expected Time Complexity: O(nlogn).
+Expected Auxiliary Space: O(n).
+
+Constraints:
+1<=n<=104
+1<= Node value <= 105
+
+
+Solution :
+
+The approach used in the provided code is a depth-first traversal of the binary tree while keeping track of the horizontal distances of each node from the root. This approach allows us to compute the vertical sum of nodes without using a map.
+
+class Solution {
+public:
+    vector<int> verticalSum(Node* root) {
+        // Vector to store horizontal distances and their corresponding sums
+        vector<pair<int, int>> sums;
+        
+        // Recursive function to traverse the tree and compute vertical sums
+        verticalSumUtil(root, 0, sums);
+        
+        // Sort the sums based on horizontal distance
+        sort(sums.begin(), sums.end());
+        
+        // Extract the sums into a vector
+        vector<int> result;
+        for (const auto& sum : sums) {
+            result.push_back(sum.second);
+        }
+        
+        return result;
+    }
+    
+private:
+    void verticalSumUtil(Node* root, int hd, vector<pair<int, int>>& sums) {
+        // Base case: if the node is NULL, return
+        if (root == NULL)
+            return;
+        
+        // Check if the horizontal distance already exists in the vector
+        bool found = false;
+        for (auto& sum : sums) {
+            if (sum.first == hd) {
+                sum.second += root->data;
+                found = true;
+                break;
+            }
+        }
+        
+        // If horizontal distance doesn't exist, add it to the vector
+        if (!found) {
+            sums.push_back({hd, root->data});
+        }
+        
+        // Recursively traverse left subtree with horizontal distance hd - 1
+        verticalSumUtil(root->left, hd - 1, sums);
+        
+        // Recursively traverse right subtree with horizontal distance hd + 1
+        verticalSumUtil(root->right, hd + 1, sums);
+    }
+};

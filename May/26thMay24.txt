@@ -1,0 +1,74 @@
+Question :
+
+Minimum Cost To Make Two Strings Identical
+
+Given two strings x and y, and two values costX and costY, the task is to find the minimum cost required to make the given two strings identical. You can delete characters from both the strings. The cost of deleting a character from string X is costX and from Y is costY. The cost of removing all characters from a string is the same.
+
+Example 1:
+
+Input: x = "abcd", y = "acdb", costX = 10 
+       costY = 20.
+Output: 30
+Explanation: For Making both strings 
+identical we have to delete character 
+'b' from both the string, hence cost 
+will be = 10 + 20 = 30.
+
+Example 2:
+
+Input : x = "ef", y = "gh", costX = 10
+        costY = 20.
+Output: 60
+Explanation: For making both strings 
+identical, we have to delete 2-2 
+characters from both the strings, hence 
+cost will be = 10 + 10 + 20 + 20 = 60.
+Your Task:
+You don't need to read or print anything. Your task is to complete the function findMinCost() which takes both strings and the costs as input parameters and returns the minimum cost.
+
+Expected Time Complexity: O(|x|*|y|)
+Expected Space Complexity: O(|x|*|y|)
+
+Constraints:
+1 ≤ |x|, |y| ≤ 1000
+1<= costX, costY <= 105
+
+
+
+Solution :
+
+class Solution {
+
+  public:
+    int findMinCost(string x, string y, int costX, int costY) {
+         int m = x.size();
+        int n = y.size();
+        
+        // Create two 1D vectors to store the minimum costs for current and previous rows
+        std::vector<int> prev(n + 1, 0), curr(n + 1, 0);
+        
+        // Base case: cost of deleting all characters from y up to j
+        for (int j = 1; j <= n; ++j) {
+            prev[j] = j * costY;
+        }
+        
+        // Fill dp array using the rolling array technique
+        for (int i = 1; i <= m; ++i) {
+            curr[0] = i * costX; // Base case: cost of deleting all characters from x up to i
+            
+            for (int j = 1; j <= n; ++j) {
+                if (x[i-1] == y[j-1]) {
+                    curr[j] = prev[j-1];
+                } else {
+                    curr[j] = std::min(prev[j] + costX, curr[j-1] + costY);
+                }
+            }
+            
+            // Swap prev and curr for the next iteration
+            std::swap(prev, curr);
+        }
+        
+        // The answer is in prev[n] after the last swap
+        return prev[n];
+    }
+};
