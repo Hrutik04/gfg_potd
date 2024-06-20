@@ -1,0 +1,65 @@
+/*
+
+Compare two fractions
+
+You are given a string str containing two fractions a/b and c/d, compare them and return the greater. If they are equal, then return "equal".
+
+Note: The string str contains "a/b, c/d"(fractions are separated by comma(,) & space( )). 
+
+Examples
+
+Input: str = "5/6, 11/45"
+Output: 5/6
+Explanation: 5/6=0.8333 and 11/45=0.2444, So 5/6 is greater fraction.
+Input: str = "8/1, 8/1"
+Output: equal
+Explanation: We can see that both the fractions are same, so we'll return a string "equal".
+Input: str = "10/17, 9/10"
+Output: 9/10
+Explanation: 10/17 = 0.588 & 9/10 = 0.9, so the greater fraction is "9/10".
+
+Expected Time Complexity: O(len|str|)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+0<=a,c<=103
+1<=b,d<=103
+
+*/
+
+
+
+class Solution {
+  public:
+    string compareFrac(string str) {
+        
+        std::string frac1, frac2;
+        std::stringstream ss(str);
+        std::getline(ss, frac1, ',');
+        std::getline(ss, frac2);
+        
+        frac2 = frac2.substr(frac2.find_first_not_of(' '));
+        
+        int a, b;
+        char slash;
+        std::stringstream ss1(frac1);
+        ss1 >> a >> slash >> b;
+
+        int c, d;
+        std::stringstream ss2(frac2);
+        ss2 >> c >> slash >> d;
+
+        long long left = static_cast<long long>(a) * d;
+        long long right = static_cast<long long>(c) * b;
+        
+        if (left > right) {
+            return frac1;
+        } else if (left < right) {
+            return frac2;
+        } else {
+            return "equal";
+        }
+
+
+    }
+};
