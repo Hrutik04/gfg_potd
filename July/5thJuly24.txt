@@ -1,0 +1,65 @@
+/*
+
+Vertical Width of a Binary Tree
+
+Given a Binary Tree. You need to find and return the vertical width of the tree.
+
+Examples :
+
+Input:
+         1
+       /    \
+      2      3
+     / \    /  \
+    4   5  6   7
+            \   \
+             8   9
+Output: 6
+Explanation: The width of a binary tree is
+the number of vertical paths in that tree.The above tree contains 6 vertical lines.
+
+Input:
+     1
+    /  \
+   2    3
+Output: 3
+Explanation: The above tree has 3 vertical lines, hence the answer is 3.
+
+Expected Time Complexity: O(n).
+Expected Auxiliary Space: O(height of the tree).
+
+Constraints:
+0 <= number of nodes <= 104
+
+*/
+
+
+class Solution {
+  public:
+    // Function to find the vertical width of a Binary Tree.
+    int verticalWidth(Node* root) {
+         if(root==NULL)
+        return 0;
+        
+        set<int> s;
+        queue<pair<int,Node*>> q;
+        q.push({0,root});
+        
+        while(!q.empty()){
+          pair<int,Node*> p = q.front();
+          q.pop();
+           s.insert(p.first);
+           
+           // check for element is present in left side of tree
+          if((p.second)->left!=NULL){
+              q.push({(p.first)+1,(p.second)->left});
+          }
+          // check for element is present in right side of tree
+          if((p.second)->right!=NULL){
+              q.push({(p.first)-1,(p.second)->right});
+          }
+        }
+  
+        return s.size();
+    }
+};
